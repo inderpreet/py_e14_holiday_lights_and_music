@@ -28,6 +28,8 @@
       url = 'http://' + host + ':5000/lights/2/' + picker.toString()
       Http.open("GET", url)
       Http.send()
+      var now = new Date().getTime();
+      while ( new Date().getTime() < now + 500 ){}
     }
 
     function setLight1Color(picker){
@@ -37,6 +39,8 @@
       url = 'http://' + host + ':5000/lights/1/'+picker.toString()
       Http.open("GET", url)
       Http.send()
+      var now = new Date().getTime();
+      while ( new Date().getTime() < now + 500 ){}
     }
     </script>
     {% endblock %}
