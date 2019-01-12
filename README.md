@@ -14,13 +14,23 @@ This project simplifies the connection and control of Holiday Lights.
 This project uses python and the following requirements:
 - flask
 - flask_restful
+- flask_cors
 - bluepy
 
 ## Installation/Building
+for now, you should run a pip install -U for all the above dependencies. I would write a script but I am too lazy
 
 ## Making Changes
 
 ## Sample Use cases 
+open a terminal in the py_rest_api folder and run
+'''
+    python server.py
+'''
+then open up chrome and point to the IP address or name of your raspberry pi with portnumber 5000 as
+192.168.0.26:5000
+
+
 
 ## Troubleshooting and FAQ
 

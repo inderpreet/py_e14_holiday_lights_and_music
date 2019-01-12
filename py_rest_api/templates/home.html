@@ -23,6 +23,11 @@
     function setTextColor(picker) {
       document.getElementsByTagName('body')[0].style.color = '#' + picker.toString()
       console.log("Light 2 Color Changed")
+      const Http = new XMLHttpRequest();
+      host = window.location.hostname
+      url = 'http://' + host + ':5000/lights/2/' + picker.toString()
+      Http.open("GET", url)
+      Http.send()
     }
 
     function setLight1Color(picker){

@@ -493,3 +493,6 @@ vids/\.vscode/settings\.json
 
 # clion
 cmake-build-debug/
+
+#vscode
+.vscode/
