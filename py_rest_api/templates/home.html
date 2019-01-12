@@ -2,24 +2,85 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
+    <style>
+      
+      body {
+        font-family: 'Montserrat', sans-serif;
+        background-color: orange !important;
+      }
+
+      .subtitles{
+        color: green;
+      }
+      @media (max-width:576px){
+        h1.title1{
+          font-size: 24px !important;
+        }
+        .subtitles{
+          font-size: 18px !important;
+          padding: 10px 10px 10px 10px !important;
+          margin-left: 10px !important;
+          margin-bottom: 25px !important;
+          /* color: pink !important; */
+        }
+      }
+    </style>
   </head>
   <body>
     {% extends "template.html" %}
     {% block content %}
     <script src="{{ url_for('static', filename='js/jscolor.js') }}"></script>
-    
-    <h2>BLE Light 1 - Xmas Tree</h2>
-    <img src = "{{ url_for('static', filename='img/ble.jpg') }}">
-	    Color: <input class="jscolor {valueElement:'chosen-value', onFineChange:'setLight1Color(this)' }" value="ab2567">
+    <div class="row">
+    <br/>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <h2 class="subtitles">BLE Light 1 - Xmas Tree</h2>
+        <img src = "{{ url_for('static', filename='img/ble.jpg') }}" style="padding-left: 20px">
+        <br/>
+        <br/>
+          <button class="jscolor {valueElement:'chosen-value', onFineChange:'setLight1Color(this)'}">
+             Click to Select Tree color
+          </button>
+          <!-- HEX value: <input id="chosen-value" value="000000"> -->
+        <!-- <img src = "{{ url_for('static', filename='img/ble.jpg') }}">
+          Color: <input class="jscolor {valueElement:'chosen-value', onFineChange:'setLight1Color(this)' }" value="ab2567"> -->
+      </div>
+      
+      <div class="col-md-6">
+        <h2 class="subtitles">BLE Light 2 - Snow man</h2>
+        <img src = "{{ url_for('static', filename='img/ble.jpg') }}" style="padding-left: 20px">
+        <br/>
+        <br/>
+          <button class="jscolor {valueElement:'chosen-value', onFineChange:'setLight2Color(this)'}">
+          Click to Select Snowman color
+        </button>
+          <!-- HEX value: <input id="chosen-value" value="000000"> -->
+      </div>
+    </div>
+    <br/>
+    <br/>
+    <div class="row">
+      <div class="col-md-3">
+        <button onclick="start()">
+          Animate
+        </button>
+      </div>
+      <div class="col-md-3">
+        <button onclick="clearInterval(myInterval)">
+          Stop Animation
+        </button>
+      </div>
+      <div class="col-md-3">
+          <button onclick="lightsout()">
+            clear
+          </button>
+      </div>
 
-    <h2>BLE Light 2 - Snow man</h2>
-    <img src = "{{ url_for('static', filename='img/ble.jpg') }}">
-      <button class="jscolor {valueElement:'chosen-value', onFineChange:'setTextColor(this)'}">
-      Pick light color
-    </button>
-      HEX value: <input id="chosen-value" value="000000">
-
+    </div>
+    <!-- Starts scripts -->
     <script>
+
     function setTextColor(picker) {
       document.getElementsByTagName('body')[0].style.color = '#' + picker.toString()
       console.log("Light 2 Color Changed")
@@ -33,6 +94,17 @@
     }
 
     function setLight1Color(picker){
+      console.log("Light 2 color is " + picker.toString())
+      const Http = new XMLHttpRequest();
+      host = window.location.hostname
+      url = 'http://' + host + ':5000/lights/2/'+picker.toString()
+      Http.open("GET", url)
+      Http.send()
+      var now = new Date().getTime();
+      while ( new Date().getTime() < now + 500 ){}
+    }
+
+    function setLight2Color(picker){
       console.log("Light 1 color is " + picker.toString())
       const Http = new XMLHttpRequest();
       host = window.location.hostname
@@ -41,6 +113,71 @@
       Http.send()
       var now = new Date().getTime();
       while ( new Date().getTime() < now + 500 ){}
+    }
+
+    var myInterval
+
+    function start(){
+      myInterval = setInterval(changeColor ,2000);
+    }
+
+    var red=0;
+    var green=0;
+    var blue=0;
+
+    function changeColor(){
+      red+=50;
+      if(red>255){
+        red=0;
+        green+=50;
+        if(green>255){
+          blue+=50;
+          if(blue>255){
+            blue=0;
+          }
+        }
+      }
+      setLights();
+    }
+
+    function setLights(){
+      console.log("color " + cvt(red) + cvt(green) + cvt(blue) );
+      const Http1 = new XMLHttpRequest();
+      const Http2 = new XMLHttpRequest();
+      host = window.location.hostname
+      url1 = 'http://' + host + ':5000/lights/1/'+cvt(red) + cvt(green) + cvt(blue)
+      Http1.open("GET", url1)
+      Http1.send()
+      sleep(500)
+      url2 = 'http://' + host + ':5000/lights/2/'+cvt(red) + cvt(green) + cvt(blue)
+      Http2.open("GET", url2)
+      Http2.send()
+    }
+
+    function cvt(i){
+      str = i.toString(16)
+      if(str.length == 1){
+        str = '0'+str
+      }
+      return str
+    }
+
+    function lightsout(){
+      clearInterval(myInterval)
+      Http1 = new XMLHttpRequest();
+      Http2 = new XMLHttpRequest();
+      host = window.location.hostname
+      url1 = 'http://' + host + ':5000/lights/1/'+cvt(0) + cvt(0) + cvt(0)
+      Http1.open("GET", url1)
+      Http1.send()
+      url2 = 'http://' + host + ':5000/lights/2/'+cvt(0) + cvt(0) + cvt(0)
+      Http2.open("GET", url2)
+      Http2.send()
+    }
+
+    // sleep time expects milliseconds
+    function sleep (time) {
+      return new Promise((resolve) => setTimeout(resolve, time));
     }
     </script>
     {% endblock %}

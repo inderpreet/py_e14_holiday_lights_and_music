@@ -1,5 +1,6 @@
 body {
-    font-family: 'Montserrat', sans-serif;
+    font-family: sans-serif;
+    background-color: lightgrey;
   }
   
   .logo {
@@ -7,3 +8,23 @@ body {
     padding: 10px;
     color: white;
   }
+
+.title1{
+  font-size: 12px;
+}
+
+
+
+@media screen and (min-width: 500px) {
+
+  .subtitles {
+    font-size: 7px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .subtitles {
+    font-size: 15px;
+  }
+}
+
