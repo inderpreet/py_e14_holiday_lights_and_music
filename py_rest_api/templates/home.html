@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+  </head>
+  <body>
+    {% extends "template.html" %}
+    {% block content %}
+    <script src="{{ url_for('static', filename='js/jscolor.js') }}"></script>
+    
+    <h2>BLE Light 1 - Xmas Tree</h2>
+    <img src = "{{ url_for('static', filename='img/ble.jpg') }}">
+	    Color: <input class="jscolor {valueElement:'chosen-value', onFineChange:'setLight1Color(this)' }" value="ab2567">
+
+    <h2>BLE Light 2 - Snow man</h2>
+    <img src = "{{ url_for('static', filename='img/ble.jpg') }}">
+      <button class="jscolor {valueElement:'chosen-value', onFineChange:'setTextColor(this)'}">
+      Pick light color
+    </button>
+      HEX value: <input id="chosen-value" value="000000">
+
+    <script>
+    function setTextColor(picker) {
+      document.getElementsByTagName('body')[0].style.color = '#' + picker.toString()
+      console.log("Light 2 Color Changed")
+    }
+
+    function setLight1Color(picker){
+      console.log("Light 1 color is " + picker.toString())
+      const Http = new XMLHttpRequest();
+      host = window.location.hostname
+      url = 'http://' + host + ':5000/lights/1/'+picker.toString()
+      Http.open("GET", url)
+      Http.send()
+    }
+    </script>
+    {% endblock %}
+  </body>
+</html>

@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+  <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.minicolors.css') }}">
+  <link rel="text/javascript" href="{{ url_for('static', filename='js/jquery-1.10.2.min.js') }}">
+  <link rel="text/javascript" href="{{ url_for('static', filename='js/jquery.minicolors.min.js') }}"> -->
+</head>
+
+<body>
+  {% extends "template.html" %}
+  {% block content %}
+  <script src="{{ url_for('static', filename='js/jscolor.js') }}"></script>
+  <h2>Example 1</h2>
+	Color: <input class="jscolor" value="ab2567">
+
+
+
+	<h2>Example 2</h2>
+
+	<button class="jscolor {valueElement:'chosen-value', onFineChange:'setTextColor(this)'}">
+		Pick text color
+	</button>
+
+	HEX value: <input id="chosen-value" value="000000">
+
+	<script>
+	function setTextColor(picker) {
+		document.getElementsByTagName('body')[0].style.color = '#' + picker.toString()
+	}
+	</script>
+
+  {% endblock %}
+</body>
+</html>
